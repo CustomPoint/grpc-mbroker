@@ -1,0 +1,75 @@
+# ignore all
+*
+# unignore all with extensions
+!*.*
+# unignore all dirs
+!*/
+# unignore Dockerfile
+!Dockerfile
+# unignore Makefile
+!Makefile
+# unignore Vagrantfile
+!Vagrantfile
+
+!CODEOWNERS
+
+# ignore keys, certs
+id_rsa
+*.key
+*.gpg
+*key.json
+*credentials.json
+*.pem
+*.csr
+*.crt
+*.pub
+
+# ignore tmp files
+*~
+*.swp
+
+# ignore macos attribute files
+.DS_Store
+
+# ignore compiled objects
+*.o
+*.pyc
+
+# ignore build output directories
+out/
+dist/
+target/
+
+# ignore log files (vagrant, npm)
+*.log
+
+# ignore project tool private dirs
+.vscode/
+.vagrant/
+.idea/
+\#*\#
+.\#*
+
+# ignore terraform stuff
+.terraform/
+terraform.tfstate.d/
+
+# ignore go unit tests profile outputs
+coverage.out
+coverage.html
+
+# python ignores
+.hypothesis/
+.pytest_cache/
+reports/
+__pycache__/
+*.py[cod]
+
+# python envs
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
