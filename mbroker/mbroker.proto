@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.mbroker";
+option java_outer_classname = "MBrokerProto";
+
+package mbroker;
+
+// The control data service definition.
+service Broker {
+    rpc ServiceTunnel (stream ServiceRequest) returns (stream ServiceResponse) {}
+    rpc ConsumerTunnel (stream ConsumeRequest) returns (stream ConsumeResponse) {}
+}
+
+// Notification messages
+message NotifyChannelOpened {
+    // channel id set by client (or client broker when routing)
+    int64 channel = 1;
+}
+message NotifyChannelClosed {
+    // channel id
+    int64 channel = 1;
+}
+
+// Open designated channel to the service
+message OpenChannel {
+    // Service to consume
+    string service = 1;
+    // channel id set by client (or client broker when routing)
+    int64 channel = 2;
+}
+// Close specified channel
+message CloseChannel {
+    // channel id
+    int64 channel = 1;
+}
+// The message with raw data
+message Data {
+    // channel id identifying channel between client server (uniquely assigned within client runtime context)
+    int64 channel = 1;
+    // raw data
+    bytes data = 2;
+}
+
+// The message from Service to the broker
+// - will register or will send data
+message ServiceRequest {
+    message RegisterProvider {
+        // device name, e.g. projects/xyz/devices/abcd (may integrate this way with goten: auth, etc)
+        string device = 1;
+        // service name, e.g. ssh
+        string service = 2;
+    }
+    oneof msg {
+        RegisterProvider register_provider = 1;
+        Data send_data = 3;
+    }
+}
+message ServiceResponse {
+    oneof msg {
+        NotifyChannelOpened channel_opened = 1;
+        NotifyChannelClosed channel_closed = 2;
+        Data recv_data = 3;
+    }
+}
+// The message from Consumer to the broker
+// - will register or will send data
+message ConsumeRequest {
+    oneof msg {
+        OpenChannel open_channel = 1;
+        Data send_data = 2;
+    }
+}
+message ConsumeResponse {
+    oneof msg {
+        NotifyChannelOpened channel_opened = 1;
+        NotifyChannelClosed channel_closed = 2;
+        Data recv_data = 3;
+    }
+}
